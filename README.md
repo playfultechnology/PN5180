@@ -1,17 +1,19 @@
 # PN5180
-![C++](https://img.shields.io/badge/C++-11-green)
-![Arduino UNO](https://img.shields.io/badge/Arduino-UNO-green)
-![Arduino Nano](https://img.shields.io/badge/Arduino-Nano-green)
-![ESP](https://img.shields.io/badge/ESP-8266-green)
-![ESP](https://img.shields.io/badge/ESP-32-green)
+![Arduino UNO](https://img.shields.io/badge/Arduino&nbsp;UNO-Supported-brgreen)
+![Arduino Nano](https://img.shields.io/badge/Arduino&nbsp;Nano-Supported-brgreen)
+![ESP](https://img.shields.io/badge/ESP8266-Supported-brgreen)
+![ESP](https://img.shields.io/badge/ESP32-Supported-brgreen)
 
 Arduino library for reading ISO15693 RFID tags using the PN5180 NFC Module from NXP Semiconductors
 
 ## Usage
-This library was created to read the UID of tags presented to a PN5180 RFID reader, principally for use in an escape room object identificiation puzzle.
+This library was created to read the UID of tags presented to a PN5180 RFID reader, principally for use in escape room object identificiation puzzles.
 
-While the funcionality is fully compliant with the published ISO15693 protocol, this library is **not** intended to implement the complete ISO15693 specification, nor all functionality of the PN5180. 
-Instead, it is optimised for the specific (most common) use case of performing an inventory request to read the 10-byte UID from any cards in range.  
+The PN5180 implements the [ISO15693 "vicinity" protocol](https://en.wikipedia.org/wiki/ISO/IEC_15693), which typically enables tags to be read at a distance of ~20-30cm. This is a significant improvement on the common MFRC522 boards that use the [ISO14443 "proximity" protocol](https://en.wikipedia.org/wiki/ISO/IEC_14443) instead, which has a typical read distance of only a few centimetres.  
+
+While the functionality of this library is fully compliant with the published ISO15693 protocol, it is **not** intended to implement the complete ISO15693 specification, nor all functionality of the PN5180 chip. Instead, it is optimised for the specific (most common) use case of performing an inventory request to read the 10-byte UID from any cards in range.
+
+If you require additional functionality (writing blocks, accessing security-protected cards, etc.), you may prefer to check out [this library](https://github.com/ATrappmann/PN5180-Library) instead. 
 
 ## Hardware
 The PN5180 uses an SPI interface additional BUSY and RESET lines, and operates at 3.3V logic. It also requires a separate 5V supply, which is solely used to power the RF antenna.
