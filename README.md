@@ -7,6 +7,11 @@
 
 Arduino library for reading ISO15693 RFID tags using the PN5180 NFC Module from NXP Semiconductors
 
+## Usage
+This library was created to read the UID of tags presented to a PN5180 RFID reader. 
+While the funcionality is fully compliant with the published ISO15693 protocol, this library is **not** intended to implement the complete ISO15693 specification, nor all functionality of the PN5180. 
+Instead, it is optimised for the specific (most common) use case of performing an inventory request to read the 10-byte UID from any cards in range.  
+
 ## Hardware
 The PN5180 uses an SPI interface additional BUSY and RESET lines, and operates at 3.3V logic. It also requires a separate 5V supply, which is solely used to power the RF antenna.
 It therefore requires the following connections to the host controller:
