@@ -9,7 +9,7 @@ Arduino library for reading ISO15693 RFID tags using the PN5180 NFC Module from 
 ## Introduction
 This library was created to read the UID of tags presented to a PN5180 RFID reader.
 
-The PN5180 implements the [ISO15693 "vicinity" protocol](https://en.wikipedia.org/wiki/ISO/IEC_15693), which typically enables tags to be read at a distance of ~20-30cm. This is a significant improvement on the common MFRC522 boards that use the [ISO14443 "proximity" protocol](https://en.wikipedia.org/wiki/ISO/IEC_14443) instead, which has a typical read distance of only a few centimetres.  
+The PN5180 implements the [ISO15693 "vicinity" protocol](https://en.wikipedia.org/wiki/ISO/IEC_15693), which typically enables tags to be read at a distance of ~20cm. This is a significant improvement on the common MFRC522 boards that use the [ISO14443 "proximity" protocol](https://en.wikipedia.org/wiki/ISO/IEC_14443) instead, which has a typical read distance of only a few centimetres.  
 
 While the functionality of this library is fully compliant with the published ISO15693 protocol, it is **not** intended to implement the complete ISO15693 specification, nor all functionality of the PN5180 chip. Instead, it is optimised for the specific (most common) use case of performing an inventory request to read the 10-byte UID from any cards in range.
 
