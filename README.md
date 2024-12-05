@@ -47,7 +47,8 @@ The PN5180 uses an SPI interface additional BUSY and RESET lines, and operates a
 ### Suggested Wiring
 The following table gives recommended connections to the host controller. 
 Arduino and ESP8266 boards _require_ the use of the specific pins named for MOSI, MISO, and SCK lines. The ESP32 allows the SPI interface to be mapped to other pins if desired (although this comes with a slight performance cost, it is unlikely to cause an issue).
-All other connections may be assigned to any available GPIO pin as desired.
+
+Other connections (NSS, RST, BUSY) may be assigned to any available GPIO pin as desired, and specified in the constructor in code.
 
 | PN5180 | Arduino UNO / Nano | ESP8266 | ESP32 |
 | ------ | ------------------ | ------- |------ |
