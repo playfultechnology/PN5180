@@ -1,56 +1,47 @@
+/**
+ * ISO15693 getInventory() example
+ *
+ * Part of the PN5180 library (https://github.com/playfultechnology/PN5180)
+ * Copyright (c) 2024 Alastair Aitchison, Playful Technology
+ */
+
+// Include the PN5180 library
 #include "PN5180.h"
 
-// Define your pin connections here
-// Suggested examples are as follows, though any available GPIO pins may be used:
-#ifdef ESP32
-  // MOSI 23, MISO 19, CLK 18  (default VSPI interface, can be reassigned)
-  #define PN5180_NSS  5
-  #define PN5180_BUSY 17
-  #define PN5180_RST  16
-#elif defined(ESP8266)
-  // MOSI D7, MISO D6, CLK D5
-  #define PN5180_NSS  D8
-  #define PN5180_BUSY D0
-  #define PN5180_RST  D4
-// For Arduino UNO, Nano, etc.
-#else
-  // MOSI 11, MISO 12, CLK 13
-  #define PN5180_NSS 10
-  #define PN5180_BUSY 9
-  #define PN5180_RST  8
-#endif
-
-constexpr byte beepPin = 2;
-
-PN5180 pn5180(PN5180_NSS, PN5180_BUSY, PN5180_RST);
+// Create a PN5180 instance specifying appropriate pins here
+// PN5180 pn5180(/* NSS=*/ D8, /* BUSY=*/ D0, /* RST=*/ D4); // ESP8266
+// PN5180 pn5180(/* NSS=*/ 10, /* BUSY=*/ 9, /* RST=*/ 8); // Arduino
+PN5180 pn5180(/* NSS=*/ 5, /* BUSY=*/ 17, /* RST=*/ 16); // ESP32
 
 void setup() {
+  // Start serial connection to print UIDs of any tags read
   Serial.begin(115200);
   delay(1000);
-  Serial.println(__FILE__ __DATE__);
+  Serial.println("PN5180 getInventory() example");  
+  
+  // Initialise PN5180 interface
   pn5180.begin();
-  Serial.println("PN5180 Initialized.");
-
-  pinMode(beepPin, OUTPUT);
-
 }
 
 void loop() {
+  // Create an 8-byte integer array to store UID of any detected tag
   uint8_t uid[8];
+  
+  // Call the getInventory() method
   if (pn5180.getInventory(uid)) {
+	  
+	// If tag was found, print its ID to the serial monitor
     Serial.print("Tag UID: ");
+	// Format each byte as HEX, padded with leading zeroes if required
     for (int i = 7; i >= 0; i--) {
       if (uid[i] < 0x10) Serial.print("0");
       Serial.print(uid[i], HEX);
     }
     Serial.println();
-
-    digitalWrite(beepPin, HIGH);
-    delay(50);
-    digitalWrite(beepPin, LOW);
-
-  } else {
+  } 
+  // No tag in range
+  else {
     Serial.println("No tag detected.");
   }
-  delay(1000);
+  delay(500);
 }

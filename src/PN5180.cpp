@@ -54,7 +54,7 @@ void PN5180::activateTransceive(){
 bool PN5180::sendBytes(uint8_t *sendBuffer, size_t sendBufferLen){
   // 0. Wait until PN5180 is not busy
   if(!waitUntilAvailable()){ 
-    Serial.print("Error in SPI send (0)");
+    Serial.print("SPI send error 0");
     digitalWrite(_nss, HIGH);
     return false;
   }
@@ -65,7 +65,7 @@ bool PN5180::sendBytes(uint8_t *sendBuffer, size_t sendBufferLen){
   SPI.transfer((uint8_t*)sendBuffer, sendBufferLen);
   // 3. Wait for BUSY to go HIGH
   if(!waitUntilBusy()){ 
-    Serial.print("Error in SPI send (Step 3)");
+    Serial.print("SPI send error 3");
     SPI.endTransaction();
     digitalWrite(_nss, HIGH);
     return false;
@@ -74,7 +74,7 @@ bool PN5180::sendBytes(uint8_t *sendBuffer, size_t sendBufferLen){
   digitalWrite(_nss, HIGH); delay(5);
   // 5. Wait until BUSY goes LOW
   if(!waitUntilAvailable()){ 
-    Serial.print("Error in SPI send (Step 5)");
+    Serial.print("SPI send error 5");
     SPI.endTransaction();
     digitalWrite(_nss, HIGH);
     return false;
@@ -90,7 +90,7 @@ bool PN5180::readBytes(uint8_t *recvBuffer, size_t recvBufferLen){
   memset(recvBuffer, 0x00, recvBufferLen);
   // 0. Wait until PN5180 is not busy
   if(!waitUntilAvailable()){ 
-    Serial.print("Error in SPI receive (0)");
+    Serial.print("SPI receive error 0");
     digitalWrite(_nss, HIGH);
     return false;
   }
@@ -101,7 +101,7 @@ bool PN5180::readBytes(uint8_t *recvBuffer, size_t recvBufferLen){
   SPI.transfer(recvBuffer, recvBufferLen);
   // 3. Wait until BUSY is HIGH
   if(!waitUntilBusy()){ 
-    Serial.print("Error in SPI receive (3)");
+    Serial.print("SPI receive error 3");
     SPI.endTransaction();
     digitalWrite(_nss, HIGH);
     return false;
@@ -110,7 +110,7 @@ bool PN5180::readBytes(uint8_t *recvBuffer, size_t recvBufferLen){
   digitalWrite(_nss, HIGH); delay(5);
   // 5. Wait until BUSY is LOW
   if(!waitUntilAvailable()){ 
-    Serial.print("Error in SPI receive (5)");
+    Serial.print("SPI receive error 5");
     SPI.endTransaction();
     return false;
   }
@@ -265,9 +265,10 @@ void PN5180::sendEndOfFrame(){
 // Receive contents of the PN5180 reception buffer
 bool PN5180::readReceptionBuffer(uint8_t* buffer, int16_t len){
   if(len<0 || len>508) {
-    Serial.print("Error: invalid length request for read buffer: ");
-    Serial.println(len);
-    return 0;
+    Serial.print("Invalid read length request (");
+    Serial.print(len);
+	Serial.println("bytes requested)");
+    return false;
   }
   uint8_t cmdRead[] = { PN5180_READ_DATA, 0x00 };
   sendBytes(cmdRead, sizeof(cmdRead));
@@ -275,8 +276,7 @@ bool PN5180::readReceptionBuffer(uint8_t* buffer, int16_t len){
 
   if(buffer == nullptr) {
     hardReset();
-    Serial.println("Invalid or unexpected response length.");
-    Serial.print("Attempted to read ");
+    Serial.print("Invalid response. Attempted to read ");
     Serial.print(len);
     Serial.println("bytes.");
     return false;
@@ -324,21 +324,21 @@ bool PN5180::waitUntilBusy(){
 // Handle any errors received
 void PN5180::errorHandler(ISO15693ErrorCode errorCode){
   switch (errorCode) {
-    case EC_NO_CARD: Serial.println("No card detected!"); break;
+    case EC_NO_CARD: Serial.println("No card present"); break;
     case ISO15693_EC_OK: Serial.println("OK!"); break;
-    case ISO15693_EC_NOT_SUPPORTED: Serial.println("Command is not supported!"); break;
-    case ISO15693_EC_NOT_RECOGNIZED: Serial.println("Command is not recognized!"); break;
-    case ISO15693_EC_OPTION_NOT_SUPPORTED: Serial.println("Option is not supported!"); break;
-    case ISO15693_EC_UNKNOWN_ERROR: Serial.println("Unknown error!"); break;
-    case ISO15693_EC_BLOCK_NOT_AVAILABLE: Serial.println("Specified block is not available!"); break;
-    case ISO15693_EC_BLOCK_ALREADY_LOCKED: Serial.println("Specified block is already locked!"); break;
-    case ISO15693_EC_BLOCK_IS_LOCKED: Serial.println("Specified block is locked and cannot be changed!"); break;
-    case ISO15693_EC_BLOCK_NOT_PROGRAMMED: Serial.println("Specified block was not successfully programmed!"); break;
-    case ISO15693_EC_BLOCK_NOT_LOCKED: Serial.println("Specified block was not successfully locked!"); break;
+    case ISO15693_EC_NOT_SUPPORTED: Serial.println("Command not supported"); break;
+    case ISO15693_EC_NOT_RECOGNIZED: Serial.println("Command not recognized"); break;
+    case ISO15693_EC_OPTION_NOT_SUPPORTED: Serial.println("Option not supported"); break;
+    case ISO15693_EC_UNKNOWN_ERROR: Serial.println("Unknown error"); break;
+    case ISO15693_EC_BLOCK_NOT_AVAILABLE: Serial.println("Block not available"); break;
+    case ISO15693_EC_BLOCK_ALREADY_LOCKED: Serial.println("Block is already locked"); break;
+    case ISO15693_EC_BLOCK_IS_LOCKED: Serial.println("Block is locked"); break;
+    case ISO15693_EC_BLOCK_NOT_PROGRAMMED: Serial.println("Block not successfully programmed"); break;
+    case ISO15693_EC_BLOCK_NOT_LOCKED: Serial.println("Block not successfully locked"); break;
     default:
       if ((errorCode >= 0xA0) && (errorCode <= 0xDF)) {
-        Serial.println("Custom command error code!");
+        Serial.println("Custom error code");
       }
-      else Serial.println("Undefined error code in ISO15693!");
+      else Serial.println("Undefined error code");
   }
 }
