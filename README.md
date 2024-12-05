@@ -16,7 +16,7 @@ While the functionality of this library is fully compliant with the published IS
 If you require additional functionality (writing blocks, accessing security-protected cards, etc.), you may prefer to check out [this library](https://github.com/ATrappmann/PN5180-Library) instead. 
 
 ## Usage
-The library exposes a single method `getInventory()`. The return value is the number of tags that are detected in the range of the reader, while the 8-byte ID of the first detected tag is assigned to an 8 byte integer array passed as a parameter to the method.
+The library exposes a single method `getInventory()`. The return value is the number of tags that are detected in the range of the reader, while the ID of the first detected tag is assigned to an 8-byte integer array passed as a parameter to the method.
 
 ### Example
 
