@@ -61,11 +61,10 @@ All other connections may be assigned to any available GPIO pin as desired.
 | ![BUSY](https://img.shields.io/badge/BUSY-purple)  | 9 | D0 | 17 |
 | ![GND](https://img.shields.io/badge/GND-black)  | GND | GND | GND |
 
+![Wiring](https://github.com/playfultechnology/PN5180/blob/main/extras/PN5180%20Wiring_bb.jpg)
+
 ### Notes
 - If using a 5V controller (e.g. Arduino UNO, Nano, or Mega), those pins marked * (RST, NSS, MOSI, SCK) *must* be connected via a logic level shifter between the controller and the PN5180. This ensures that any outputs that are set to 5V HIGH by the Arduino are reduced to 3.3V inputs for the controller. 
 - Other signal lines (MISO, BUSY), which are set to HIGH by the PN5180 *may* be shifted up to 5V before the Arduino, but this is not generally necessary since the 3.3V output by the PN5180 will still generally be read as a HIGH input on a 5V device.  
 - The GPIO, IRQ, AUX and REQ pins exposed on the board are not required and not used by this library.
 - It is recommended to use a dedicated logic level shifter such as TXB0108 or a logic gate such as a 74LVC1G125. This library has also been tested with simpler transistor-based "I2C level shifter boards", but these have much slower switching speeds which can affect data integrity.
-
-### Suggested Wiring
-![Wiring](https://github.com/playfultechnology/PN5180/blob/main/extras/PN5180%20Wiring_bb.jpg)
